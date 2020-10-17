@@ -1,0 +1,108 @@
+
+<div id="app">
+  <div class="feeds">
+    <div class="alert alert-success">All <span class="{{if (gt (len .Unread) 0)}}strong{{end}}">({{len .Unread}})</span></div>
+    {{range .Feeds}}
+    <div class="alert" data-feed="{{.HomepageURL}}">{{.Title}} <span class="{{if (gt .UnreadCount 0)}}strong{{end}}">({{.UnreadCount}})</span></div>
+    {{end}}
+  </div>
+
+  <div class="items">
+    {{range .Unread}}
+    <div class="alert alert-info item-heading" data-feed="{{.FeedHomepageURL}}" data-id="{{.ID}}" id="{{.ID}}">
+      <span class="feed-title">{{.FeedTitle}}</span>
+      <span class="date" title="{{.Created}}">{{humanDate .Created}}</span>
+      <h3 class="item-title"><a href="{{.URL}}">{{.Title}}</a></h3>
+    </div>
+    <div class="card item-content hide" data-id="{{.ID}}">
+      <div class="card-content">
+        <div class="loading"></div>
+        <feed-item item-id="{{.ID}}">
+        </feed-item>
+      </div>
+    </div>
+    {{end}}
+  </div>
+</div>
+
+<script>
+  const vm = new Vue({
+    el: '#app',
+    data: {
+      feeds: [],
+      items: [],
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    async created() {
+      this.feeds = (await fetch(`/api/feeds`)).json();
+      this.items = (await fetch(`/api/unread`)).json();
+    }
+  });
+</script>
+
+
+<script>
+  function reset() {
+    [...document.querySelectorAll('.items [data-feed]')].forEach(item => {
+      item.style.display = 'none';
+    });
+    [...document.querySelectorAll('.feeds .alert')].forEach(el => {
+      el.classList.remove('alert-success');
+    });
+    [...document.querySelectorAll('.items .item-content')].forEach(el => {
+      el.classList.add('hide');
+    });
+  }
+
+  function markAsRead(id) {
+    fetch(`/api/read/${id}`, {method: "POST"})
+    .then(res => {
+      if (res.status < 400) {
+        document.querySelector('.items .alert[data-id="'+id+'"]').classList.remove('alert-info');
+      }
+    })
+    .catch(err => console.log)
+  }
+
+  [...document.querySelectorAll('.feeds .alert')].forEach(feed => {
+    feed.addEventListener('click', () => {
+      reset();
+      if (!feed.dataset.feed) {
+        [...document.querySelectorAll('.items [data-feed]')].forEach(item => {
+          item.style.display = 'block';
+        });
+      } else {
+        if (document.querySelector('.items [data-feed="'+feed.dataset.feed+'"]')) {
+          [...document.querySelectorAll('.items [data-feed="'+feed.dataset.feed+'"]')].forEach(item => {
+            item.style.display = 'block';
+          });
+        }
+      }
+      feed.classList.add('alert-success');
+    });
+  });
+
+  [...document.querySelectorAll('.items [data-feed]')].forEach(item => {
+    item.addEventListener('click', () => {
+      window.location.hash = item.dataset.id;
+
+      [...document.querySelectorAll('.items .item-content:not([data-id="'+item.dataset.id+'"])')].forEach(el => {
+          el.classList.add('hide');
+      });
+
+      document.querySelector('.items .item-content[data-id="'+item.dataset.id+'"]').classList.toggle('hide');
+      document.querySelector('.items .item-content[data-id="'+item.dataset.id+'"] feed-item').load()
+        .then(() => {
+          document.querySelector('.items .item-content[data-id="'+item.dataset.id+'"] .loading').remove();
+          markAsRead(item.dataset.id);
+        });
+    })
+  });
+
+
+</script>
