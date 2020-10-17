@@ -14,7 +14,7 @@ var fp = gofeed.NewParser()
 var feedStore = &FeedStore{}
 
 func Refresh() error {
-	interval := viper.GetInt("refreshTimeoutMinutes")
+	interval := viper.GetInt("REFRESH_TIMEOUT")
 
 	for {
 		fmt.Println("Refreshing feeds...")

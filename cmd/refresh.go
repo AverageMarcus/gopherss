@@ -20,7 +20,7 @@ var (
 
 func init() {
 	refreshCmd.Flags().IntVar(&interval, "interval", 15, "How long in minutes to wait before refreshing feeds")
-	viper.BindPFlag("refreshTimeoutMinutes", refreshCmd.Flags().Lookup("interval"))
+	viper.BindPFlag("REFRESH_TIMEOUT", refreshCmd.Flags().Lookup("interval"))
 
 	rootCmd.AddCommand(refreshCmd)
 }

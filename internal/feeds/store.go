@@ -10,7 +10,7 @@ import (
 
 func (fs *FeedStore) getDB() *gorm.DB {
 	if fs.db == nil {
-		db, err := gorm.Open(sqlite.Open(viper.GetString("dbPath")), &gorm.Config{
+		db, err := gorm.Open(sqlite.Open(viper.GetString("DB_PATH")), &gorm.Config{
 			Logger: logger.Default.LogMode(logger.Error),
 		})
 		if err != nil {
