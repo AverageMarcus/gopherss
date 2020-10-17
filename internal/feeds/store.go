@@ -5,17 +5,24 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"gorm.io/gorm/logger"
 )
 
 func (fs *FeedStore) getDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(viper.GetString("dbPath")), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-	db.AutoMigrate(&Feed{})
-	db.AutoMigrate(&Item{})
+	if fs.db == nil {
+		db, err := gorm.Open(sqlite.Open(viper.GetString("dbPath")), &gorm.Config{
+			Logger: logger.Default.LogMode(logger.Error),
+		})
+		if err != nil {
+			panic("failed to connect database")
+		}
+		db.AutoMigrate(&Feed{})
+		db.AutoMigrate(&Item{})
 
-	return db
+		fs.db = db
+	}
+
+	return fs.db
 }
 
 func (fs *FeedStore) GetFeed(id string) *Feed {
