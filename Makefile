@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := default
 
 IMAGE ?= docker.cluster.fun/averagemarcus/gopherss:latest
-PLATFORMS ?= linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+PLATFORMS ?= linux/amd64,linux/arm/v7,linux/arm64
 
 export DOCKER_CLI_EXPERIMENTAL=enabled
 

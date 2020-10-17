@@ -6,7 +6,7 @@ ARG TARGETOS
 ARG TARGETARCH
 
 WORKDIR /app/
-RUN apk update && apk add --no-cache git && adduser -D -g '' gopher && apk add -U --no-cache ca-certificates
+RUN apk update && apk add --no-cache git gcc && adduser -D -g '' gopher && apk add -U --no-cache ca-certificates
 ADD go.mod go.sum ./
 RUN go mod download
 ADD . .
