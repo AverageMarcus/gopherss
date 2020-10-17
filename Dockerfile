@@ -10,7 +10,7 @@ RUN apk update && apk add --no-cache git && adduser -D -g '' gopher && apk add -
 ADD go.mod go.sum ./
 RUN go mod download
 ADD . .
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-w -s" -o gopherss .
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-w -s" -o gopherss .
 
 FROM --platform=${TARGETPLATFORM:-linux/amd64} scratch
 WORKDIR /app/
