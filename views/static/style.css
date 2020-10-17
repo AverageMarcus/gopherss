@@ -9,7 +9,7 @@
 
 .dark .strong {
   font-weight: bold;
-  color: #eee;
+  color: #fefefe;
 }
 
 .loading {
@@ -113,4 +113,8 @@
   .container {
     max-width: 100em;
   }
+}
+
+.dark {
+  background: #333;
 }

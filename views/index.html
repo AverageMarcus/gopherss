@@ -6,12 +6,12 @@
     <title>Gopherss</title>
     <script src="/static/feed-item.js" defer></script>
 
-    <script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
 
     <link rel="stylesheet" href="https://unpkg.com/hack@0.8.1/dist/hack.css">
     <link rel="stylesheet" href="https://unpkg.com/hack@0.8.1/dist/dark.css">
     <link rel="stylesheet" href="https://unpkg.com/hack@0.8.1/dist/dark-grey.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/static/style.css">
   </head>
@@ -35,14 +35,12 @@
         </div>
 
         <div class="feeds">
-          <div :class="{ alert: true, 'alert-success': selectedFeed == ''}" v-on:click="loadFeed('')">
-            All
-            <span :class="{ strong: items.length }">({{items.length}})</span>
+          <div :class="{ strong: items.length, alert: true, 'alert-success': selectedFeed == ''}" v-on:click="loadFeed('')">
+            All ({{items.length}})
           </div>
 
-          <div v-for="feed in feeds" :class="{'alert': true, 'alert-success': selectedFeed == feed.FeedURL  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
-            {{feed.Title}}
-            <span :class="{ strong: unreadCount(feed) }">({{unreadCount(feed)}})</span>
+          <div v-for="feed in feeds" :class="{strong: unreadCount(feed), 'alert': true, 'alert-success': selectedFeed == feed.FeedURL  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
+            {{feed.Title}} ({{unreadCount(feed)}})
           </div>
 
           <div class="menu">
@@ -86,7 +84,7 @@
             <div class="card item-content" :data-id="item.ID" v-show="item.ID == selectedItem">
               <div class="card-content">
                 <div class="loading"></div>
-                <feed-item :item-id="item.ID"></feed-item>
+                <feed-item :item-id="item.ID" :class="{ dark: isDark }"></feed-item>
               </div>
             </div>
           </div>
@@ -112,6 +110,7 @@
             newSiteURL: '',
             opml: '',
             isBusy: false,
+            isDark: false,
           },
           computed: {
             shownItems() {
@@ -128,6 +127,7 @@
               document.body.style.cursor = isBusy ? "wait" : "";
             },
             toggleDarkMode() {
+              this.isDark = !this.isDark;
               document.body.classList.toggle('dark');
               document.body.classList.toggle('dark-grey');
             },
@@ -290,6 +290,10 @@
             };
 
             document.addEventListener('keydown', this._keyListener.bind(this));
+
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              this.toggleDarkMode();
+            }
           },
           beforeDestroy() {
             document.removeEventListener('keydown', this._keyListener);
