@@ -9,11 +9,17 @@ class FeedItem extends HTMLElement {
     const template = document.createElement('template');
     template.innerHTML = `
     <style>
-    table {
+    :root {
       width: 100%;
+      overflow: scroll;
+      overflow-x: auto;
     }
     * {
       max-width: 100%;
+      height: auto;
+    }
+    table {
+      width: 100%;
     }
     img {
       margin: auto auto;

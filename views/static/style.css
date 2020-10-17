@@ -1,0 +1,116 @@
+
+.hide {
+  display: none;
+}
+.strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.dark .strong {
+  font-weight: bold;
+  color: #eee;
+}
+
+.loading {
+  margin: 0 auto;
+  display: block;
+}
+
+.container {
+  max-width: min(50%, 100em);
+  position: relative;
+}
+
+.item-heading .item-title {
+
+  margin-bottom: 0;
+  font-size: 1.1rem;
+}
+
+.item-heading {
+  margin-bottom: 2px;
+}
+
+.item-heading .date {
+  float: right;
+}
+
+.item-heading:after {
+  content: '';
+  clear: both;
+  display: table;
+}
+
+.item {
+  padding: 3px;
+}
+.item:nth-of-type(even) {
+  background: #ccc;
+}
+
+.item-content {
+  margin-bottom: 1.75rem;
+  padding: 15px;
+  margin-top: -2px;
+  border-top: none;
+}
+
+
+.feeds {
+  position: absolute;
+  left: max(-25vw, -500px);
+  width: min(25vw, 500px);
+  margin: 0 5px;
+}
+
+.feeds .alert {
+  margin-bottom: 1px !important;
+}
+
+.alert:hover:not(.alert-success):not(.no-items) {
+  border-color: #ff2e88;
+  color: #00bcd4;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.menu {
+  text-align: right;
+}
+
+.menu button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.menu button:disabled {
+  cursor: not-allowed;
+}
+
+.menu button:not(:disabled):hover svg path {
+  fill: #ff2e88;
+}
+
+.dark button svg path {
+  fill: #eee;
+}
+
+.modal {
+  z-index: 999;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(600px, 80vw);
+  background: white;
+  box-shadow: 1px 2px 3px #333
+}
+
+@media only screen and (max-width: 700px) {
+  .feeds{ display: none !important; }
+  .container {
+    max-width: 100em;
+  }
+}

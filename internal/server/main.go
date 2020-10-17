@@ -43,27 +43,20 @@ func Start(port string) error {
 		Views: engine,
 	})
 
-	app.Static("/", "./views/static")
-	app.Get("/", GetFeeds)
+	app.Static("/", "./views")
 	app.Post("/opml", PostOPML)
 
 	// API
 	app.Get("/api/feeds", api.GetFeeds)
-	// app.Post("/api/feeds", api.PostFeed)
+	app.Post("/api/feeds", api.PostFeed)
 	app.Get("/api/feed/:id", api.GetFeed)
-	// app.Get("/api/feed/:id/unread", api.GetFeedUnread)
 	app.Get("/api/item/:id", api.GetItem)
 	app.Get("/api/unread", api.GetUnread)
 	app.Post("/api/read/:id", api.PostRead)
+	app.Post("/api/read", api.PostReadAll)
+	app.Get("/api/refresh", api.RefreshAll)
 
 	return app.Listen(fmt.Sprintf(":%s", port))
-}
-
-func GetFeeds(c *fiber.Ctx) error {
-	return c.Render("index", fiber.Map{
-		"Feeds":  api.FeedStore.GetFeeds(),
-		"Unread": api.FeedStore.GetUnread(),
-	}, "layouts/main")
 }
 
 func PostOPML(c *fiber.Ctx) error {
@@ -72,9 +65,10 @@ func PostOPML(c *fiber.Ctx) error {
 		return err
 	}
 
+	f := []feeds.Feed{}
 	for _, outline := range opml.Outlines {
-		feeds.RefreshFeed(outline.XmlUrl)
+		f = append(f, feeds.RefreshFeed(outline.XmlUrl))
 	}
 
-	return nil
+	return c.JSON(f)
 }

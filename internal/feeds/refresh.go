@@ -28,8 +28,9 @@ func Refresh() error {
 	}
 }
 
-func RefreshFeed(url string) error {
+func RefreshFeed(url string) Feed {
 	fmt.Printf("Refreshing %s\n", url)
+	var feed Feed
 	f, err := fp.ParseURL(url)
 	if err != nil {
 		fmt.Printf("Failed to refresh %s\n", url)
@@ -39,7 +40,7 @@ func RefreshFeed(url string) error {
 			imageURL = f.Image.URL
 		}
 
-		feed := Feed{
+		feed = Feed{
 			ID:          strings.ReplaceAll(base64.StdEncoding.EncodeToString([]byte(url)), "/", ""),
 			Title:       f.Title,
 			Description: f.Description,
@@ -73,5 +74,5 @@ func RefreshFeed(url string) error {
 		fmt.Printf("Finished refreshing '%s'\n", feed.Title)
 	}
 
-	return nil
+	return feed
 }

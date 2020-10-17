@@ -32,7 +32,7 @@ func (fs *FeedStore) GetItem(id string) *Item {
 
 func (fs *FeedStore) GetFeeds() *[]Feed {
 	feeds := &[]Feed{}
-	fs.getDB().Preload("Items").Order("title asc").Find(feeds)
+	fs.getDB().Order("title asc").Find(feeds)
 	return feeds
 }
 
