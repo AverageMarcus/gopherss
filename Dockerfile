@@ -17,6 +17,6 @@ WORKDIR /app/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /app/gopherss /app/gopherss
-COPY ./web /app/web/
+COPY ./views /app/views/
 USER gopher
 ENTRYPOINT ["/app/gopherss"]
