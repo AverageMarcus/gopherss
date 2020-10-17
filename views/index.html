@@ -36,7 +36,7 @@
 
         <div class="feeds">
           <div :class="{ strong: items.length, alert: true, 'alert-success': selectedFeed == ''}" v-on:click="loadFeed('')">
-            All ({{items.length}})
+            All ({{unread}})
           </div>
 
           <div v-for="feed in feeds" :class="{strong: unreadCount(feed), 'alert': true, 'alert-success': selectedFeed == feed.FeedURL  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
@@ -81,9 +81,8 @@
               <span class="date" :title="item.Created">{{item.Created}}</span>
               <h3 class="item-title"><a :href="item.URL">{{item.Title}}</a></h3>
             </div>
-            <div class="card item-content" :data-id="item.ID" v-show="item.ID == selectedItem">
+            <div class="card item-content" :data-id="item.ID" v-if="item.ID == selectedItem">
               <div class="card-content">
-                <div class="loading"></div>
                 <feed-item :item-id="item.ID" :class="{ dark: isDark }"></feed-item>
               </div>
             </div>
@@ -119,6 +118,9 @@
               } else {
                 return this.items.filter(item => item.FeedID === this.selectedFeed);
               }
+            },
+            unread() {
+              return this.items.filter(item => !item.Read).length;
             }
           },
           methods: {
@@ -143,8 +145,8 @@
                 this.selectedItem = undefined;
               } else {
                 this.selectedItem = item.ID;
-                let feedItem = document.querySelector('feed-item[item-id="'+item.ID+'"]');
-                feedItem.load().then(() => feedItem.parentElement.querySelector('.loading').remove());
+
+                // document.querySelector(`feed-item[data-id='${item.ID}']`).content = item.Content || item.Description;
                 document.getElementById(this.selectedItem).scrollIntoView();
                 item.Read = true;
                 fetch(`/api/read/${item.ID}`, {method: "POST"})

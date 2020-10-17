@@ -118,3 +118,41 @@
 .dark {
   background: #333;
 }
+
+
+
+.item-content .card-content {
+  all: unset;
+  width: 100% !important;
+  overflow: scroll !important;
+  overflow-x: auto !important;
+}
+
+.item-content .card-content * {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.item-content .card-content table {
+  width: 100% !important;
+}
+
+.item-content .card-content img {
+  margin: auto auto !important;
+}
+
+.item-content .card-content p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+
+.item-content .card-content a {
+  color: #333;
+  font-weight: bold;
+}
+.dark .item-content .card-content a {
+  color: #ccc;
+}

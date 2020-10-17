@@ -5,10 +5,18 @@ class FeedItem extends HTMLElement {
     this.attachShadow({mode: 'open'});
   }
 
-  load() {
+  connectedCallback() {
     const template = document.createElement('template');
     template.innerHTML = `
     <style>
+    @font-face {
+      font-family: "charter";
+      src: url("https://glyph.medium.com/font/be78681/0-3j_4g_6bu_6c4_6c8_6c9_6cc_6cd_6ci_6cm/charter-400-normal.woff") format("woff");
+      font-style: normal;
+      font-weight: 400;
+      unicode-range: U+0-7F, U+A0, U+200A, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022, U+2026;
+    }
+
     :host {
       width: 100% !important;
       overflow: scroll !important;
@@ -25,11 +33,12 @@ class FeedItem extends HTMLElement {
       margin: auto auto !important;
     }
     p {
-      font-family: 'Roboto', sans-serif;
-      font-size: 14px;
-      line-height: 20px;
-      letter-spacing: 0em;
-      font-weight: 500;
+      font-family: charter, Georgia, "Times New Roman", Times, serif;
+      font-size: 21px;
+      font-style: normal;
+      font-weight: 400;
+      letter-spacing: -0.063px;
+      line-height: 32px
     }
     a {
       color: #333;
@@ -42,15 +51,13 @@ class FeedItem extends HTMLElement {
     </style>
     `;
 
-    if (!this.loaded) {
-      return fetch(`/api/item/${this.getAttribute('item-id')}`)
-        .then(res => res.json())
-        .then(item => {
-          template.innerHTML += item.Content || item.Description;
-          this.shadowRoot.appendChild(template.content.cloneNode(true));
-        })
-        .then(() => this.loaded = true);
-    }
+    fetch(`/api/item/${this.getAttribute('item-id')}`)
+      .then(res => res.json())
+      .then(item => {
+        template.innerHTML += item.Content || item.Description;
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
+      })
+
   }
 }
 customElements.define('feed-item', FeedItem);
