@@ -1,65 +1,57 @@
 .DEFAULT_GOAL := default
 
-IMAGE ?= docker.cloud.cluster.fun/private/${REPO_NAME_LOWER}:latest
+IMAGE ?= docker.cluster.fun/averagemarcus/gopherss:latest
+PLATFORMS ?= linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+
+export DOCKER_CLI_EXPERIMENTAL=enabled
 
 .PHONY: test # Run all tests, linting and format checks
 test: lint check-format run-tests
 
 .PHONY: lint # Perform lint checks against code
 lint:
-	@echo "⚠️ 'lint' unimplemented"
-	# GO Projects
-	# @go vet && golint -set_exit_status ./...
+	@go vet && golint -set_exit_status ./...
 
 .PHONY: check-format # Checks code formatting and returns a non-zero exit code if formatting errors found
 check-format:
-	@echo "⚠️ 'check-format' unimplemented"
-	# GO Projects
-	# @gofmt -e -l .
+	@gofmt -e -l .
 
 .PHONY: format # Performs automatic format fixes on all code
 format:
-	@echo "⚠️ 'format' unimplemented"
-	# GO Projects
-	# @gofmt -s -w .
+	@gofmt -s -w .
 
 .PHONY: run-tests # Runs all tests
 run-tests:
-	@echo "⚠️ 'run-tests' unimplemented"
-	# GO Projects
-	# @go test
-	# Node Projects
-	# @npm test
+	@go test
 
 .PHONY: fetch-deps # Fetch all project dependencies
 fetch-deps:
-	@echo "⚠️ 'fetch-deps' unimplemented"
-	# GO Projects
-	# @go mod tidy
-	# Node Projects
-	# @npm install
+	@go mod tidy
 
 .PHONY: build # Build the project
 build: lint check-format fetch-deps
-	@echo "⚠️ 'build' unimplemented"
-	# GO Projects
-	# @go build -o ${PROJECT_NAME} main.go
+	@go build -o gopherss .
 
 .PHONY: docker-build # Build the docker image
 docker-build:
-	@docker build -t $(IMAGE) .
+	@docker buildx create --use --name=crossplat --node=crossplat && \
+	docker buildx build \
+		--output "type=docker,push=false" \
+		--tag $(IMAGE) \
+		.
 
 .PHONY: docker-publish # Push the docker image to the remote registry
 docker-publish:
-	@docker push $(IMAGE)
+	@docker buildx create --use --name=crossplat --node=crossplat && \
+	docker buildx build \
+		--platform $(PLATFORMS) \
+		--output "type=image,push=true" \
+		--tag $(IMAGE) \
+		.
 
 .PHONY: run # Run the application
 run:
-	@echo "⚠️ 'run' unimplemented"
-	# GO Projects
-	# @go run main.go
-	# Node Projects
-	# @npm start
+	@go run .
 
 .PHONY: ci # Perform CI specific tasks to perform on a pull request
 ci:
@@ -67,11 +59,11 @@ ci:
 
 .PHONY: release # Release the latest version of the application
 release:
-	@echo "⚠️ 'release' unimplemented"
+	@echo "⚠️ 'released' unimplemented"
 
 .PHONY: help # Show this list of commands
 help:
-	@echo "Gopherss"
+	@echo "gopherss"
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "target	description" | expand -t20
