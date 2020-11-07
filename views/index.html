@@ -184,8 +184,9 @@
                 });
             },
             markAllRead() {
-              this.setBusy(true);
               let ids = this.shownItems.filter(item => !item.Read).map(item => item.ID);
+              if (confirm(`Are you sure you want to mark ${ids.length} items as read?`)) {
+              this.setBusy(true);
               fetch(
                 `/api/read`,
                 {method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ids)}
@@ -199,6 +200,7 @@
                   console.error(err);
                   this.setBusy(false);
                 });
+              }
             },
             addSite(url) {
               this.setBusy(true);
