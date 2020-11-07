@@ -42,8 +42,8 @@
             All ({{unread}})
           </div>
 
-          <div v-for="feed in feeds" :class="{strong: unreadCount(feed), 'alert': true, 'alert-success': selectedFeed == feed.FeedURL  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
-            {{feed.Title}} ({{unreadCount(feed)}})
+          <div v-for="feed in feeds" :class="{strong: unreadCounts[feed.ID], 'alert': true, 'alert-success': selectedFeed == feed.FeedURL  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
+            {{feed.Title}} ({{unreadCounts[feed.ID]}})
           </div>
 
           <div class="menu">
@@ -124,6 +124,13 @@
             },
             unread() {
               return this.items.filter(item => !item.Read).length;
+            },
+            unreadCounts() {
+              return this.items.filter(item => !item.Read).reduce((acc, item) => {
+                if (!acc[item.FeedID]) acc[item.FeedID] = 0;
+                acc[item.FeedID]++;
+                return acc;
+              }, {})
             }
           },
           methods: {
@@ -135,9 +142,6 @@
               this.isDark = !this.isDark;
               document.body.classList.toggle('dark');
               document.body.classList.toggle('dark-grey');
-            },
-            unreadCount(feed) {
-              return this.items.filter(item => item.FeedID == feed.ID).length;
             },
             loadFeed(feed) {
               this.selectedItem = undefined;
@@ -187,20 +191,20 @@
             markAllRead() {
               let ids = this.shownItems.filter(item => !item.Read).map(item => item.ID);
               if (confirm(`Are you sure you want to mark ${ids.length} items as read?`)) {
-              this.setBusy(true);
-              fetch(
-                `/api/read`,
-                {method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ids)}
-                )
-                .then(res => res.json())
-                .then(items => this.items = items)
-                .then(() => {
-                  this.setBusy(false);
-                })
-                .catch(err => {
-                  console.error(err);
-                  this.setBusy(false);
-                });
+                this.setBusy(true);
+                fetch(
+                  `/api/read`,
+                  {method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ids)}
+                  )
+                  .then(res => res.json())
+                  .then(items => this.items = items)
+                  .then(() => {
+                    this.setBusy(false);
+                  })
+                  .catch(err => {
+                    console.error(err);
+                    this.setBusy(false);
+                  });
               }
             },
             addSite(url) {
