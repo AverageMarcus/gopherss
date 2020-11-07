@@ -7,6 +7,9 @@
     <script src="/static/feed-item.js" defer></script>
 
     <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="https://unpkg.com/dayjs@1.9.5/plugin/relativeTime.js"></script>
+    <script>dayjs.extend(window.dayjs_plugin_relativeTime)</script>
 
     <link rel="stylesheet" href="https://unpkg.com/hack@0.8.1/dist/hack.css">
     <link rel="stylesheet" href="https://unpkg.com/hack@0.8.1/dist/dark.css">
@@ -78,8 +81,7 @@
           <div v-for="item in shownItems" :id="item.ID">
             <div :class="{'alert': true, 'alert-info': item.Read == false, 'item-heading': true}" :data-feed="item.FeedHomepageURL" v-on:click="loadItem(item)">
               <span class="feed-title">{{item.FeedTitle}}</span>
-              <span class="date" :title="item.Created">{{item.Created}}</span>
-              <h3 class="item-title"><a :href="item.URL">{{item.Title}}</a></h3>
+              <span class="date" :title="item.Created">{{ dayjs(item.Created).fromNow() }}</span>
             </div>
             <div class="card item-content" :data-id="item.ID" v-if="item.ID == selectedItem">
               <div class="card-content">
