@@ -56,6 +56,10 @@ class FeedItem extends HTMLElement {
       .then(item => {
         template.innerHTML += item.Content || item.Description;
         this.shadowRoot.appendChild(template.content.cloneNode(true));
+        [...this.shadowRoot.querySelectorAll('a[href^=http]')].forEach(a => {
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener");
+        })
       })
 
   }
