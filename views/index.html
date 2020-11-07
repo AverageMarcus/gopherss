@@ -82,6 +82,7 @@
             <div :class="{'alert': true, 'alert-info': item.Read == false, 'item-heading': true}" :data-feed="item.FeedHomepageURL" v-on:click="loadItem(item)">
               <span class="feed-title">{{item.FeedTitle}}</span>
               <span class="date" :title="item.Created">{{ dayjs(item.Created).fromNow() }}</span>
+              <h3 class="item-title">{{item.Title}} <a :href="item.URL">↗</a></h3>
             </div>
             <div class="card item-content" :data-id="item.ID" v-if="item.ID == selectedItem">
               <div class="card-content">
