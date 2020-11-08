@@ -57,6 +57,18 @@ func (fs *FeedStore) GetUnread() *[]ItemWithFeed {
 	return items
 }
 
+func (fs *FeedStore) GetSaved() *[]ItemWithFeed {
+	items := &[]ItemWithFeed{}
+	fs.getDB().Table("items").
+		Where("save = ?", true).
+		Select("items.*, feeds.title as feed_title, feeds.homepage_url as feed_homepage_url").
+		Order("items.created desc, items.title").
+		Joins("left join feeds on feeds.id = items.feed_id").
+		Find(items)
+
+	return items
+}
+
 func (fs *FeedStore) DeleteOldReadItems() {
 	t := time.Now()
 	threshold := t.Add(-time.Hour * 24 * 7)
@@ -95,6 +107,15 @@ func (fs *FeedStore) MarkAsRead(itemID string) {
 	fs.getDB().Where("id = ?", itemID).First(item)
 
 	item.Read = true
+
+	fs.getDB().Save(*item)
+}
+
+func (fs *FeedStore) ToggleSaved(itemID string) {
+	item := &Item{}
+	fs.getDB().Where("id = ?", itemID).First(item)
+
+	item.Save = !item.Save
 
 	fs.getDB().Save(*item)
 }

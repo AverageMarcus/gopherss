@@ -33,6 +33,10 @@ func (a *API) GetUnread(c *fiber.Ctx) error {
 	return c.JSON(a.FeedStore.GetUnread())
 }
 
+func (a *API) GetSaved(c *fiber.Ctx) error {
+	return c.JSON(a.FeedStore.GetSaved())
+}
+
 func (a *API) GetAll(c *fiber.Ctx) error {
 	return c.JSON(a.FeedStore.GetAll())
 }
@@ -59,4 +63,9 @@ func (a *API) RefreshAll(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(a.FeedStore.GetUnread())
+}
+
+func (a *API) SaveItem(c *fiber.Ctx) error {
+	a.FeedStore.ToggleSaved(c.Params("id"))
+	return nil
 }

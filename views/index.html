@@ -60,6 +60,11 @@
             {{feed.Title}} ({{unreadCounts[feed.ID] || '0'}})
           </div>
 
+          <div :class="{ strong: items.length, alert: true, 'alert-success': selectedFeed == 'SAVED'}" v-on:click="loadFeed('SAVED')">
+            <svg  viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M12.8 5.6l-.8.8-.8-.8a5.4 5.4 0 00-7.6 7.6l7.9 7.9c.3.3.7.3 1 0l8-8a5.4 5.4 0 10-7.7-7.5z" style="fill: #ff2e88" fill-rule="nonzero"/></svg>
+            Saved ({{saved}})
+          </div>
+
           <div class="menu">
             <button title="Add New Site" v-on:click="showAddModal = true" :disabled="isBusy">
               <svg width="30" height="30" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.8 3C19.5 3 21 4.5 21 6.3V12a6.5 6.5 0 00-8.2 1H8.6a.8.8 0 000 1.5h3.1A6.5 6.5 0 0012 21H6.3A3.3 3.3 0 013 17.7V9.4A2.2 2.2 0 103.2 5C3.7 3.9 5 3 6.2 3h11.6zm-2.5 6.5H8.7a.8.8 0 000 1.5h6.6a.8.8 0 000-1.5z" fill="#212121"/><path d="M3.8 6a1.3 1.3 0 110 2.5 1.3 1.3 0 010-2.5z" fill="#212121"/><path d="M23 17.5a5.5 5.5 0 10-11 0 5.5 5.5 0 0011 0zm-5 .5v2.5a.5.5 0 11-1 0V18h-2.5a.5.5 0 010-1H17v-2.5a.5.5 0 111 0V17h2.5a.5.5 0 010 1H18z" fill="#212121"/></svg>
@@ -100,6 +105,12 @@
             </div>
             <div class="card item-content" :data-id="item.ID" v-if="item.ID == selectedItem">
               <div class="card-content">
+                <div class="menu">
+                  <button title="Save" v-on:click="saveItem(item)" :disabled="isBusy">
+                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.8 5.6l-.8.8-.8-.8a5.4 5.4 0 00-7.6 7.6l7.9 7.9c.3.3.7.3 1 0l8-8a5.4 5.4 0 10-7.7-7.5z" :style="{'fill': item.Save ? '#ff2e88' : '#eee' }" fill-rule="nonzero"/></svg>
+                  </button>
+                </div>
+
                 <feed-item :item-id="item.ID" :class="{ dark: isDark }"></feed-item>
               </div>
             </div>
@@ -120,6 +131,7 @@
           data: {
             feeds: [],
             items: [],
+            savedItems: [],
             selectedFeed: '',
             selectedItem: undefined,
             showAddModal: false,
@@ -133,12 +145,17 @@
             shownItems() {
               if (this.selectedFeed === '') {
                 return this.items.filter(item => item.ID == this.selectedItem || !item.Read || item.Read === this.showRead);
+              } else if (this.selectedFeed === 'SAVED') {
+                return this.savedItems;
               } else {
                 return this.items.filter(item => item.ID == this.selectedItem || item.FeedID === this.selectedFeed && (!item.Read || item.Read === this.showRead));
               }
             },
             unread() {
               return this.items.filter(item => !item.Read).length;
+            },
+            saved() {
+              return this.savedItems.length;
             },
             unreadCounts() {
               return this.items.filter(item => !item.Read).reduce((acc, item) => {
@@ -171,6 +188,20 @@
                 item.Read = true;
                 fetch(`/api/read/${item.ID}`, {method: "POST"})
               }
+            },
+            saveItem(item) {
+              this.setBusy(true);
+              fetch(`/api/item/${item.ID}/save`, {method: "POST"})
+                .then(() => {
+                  item.Save = !item.Save;
+
+                  if (item.Save) {
+                    this.savedItems.push(item);
+                  } else {
+                    this.savedItems = this.savedItems.filter(i => item.ID != i.ID);
+                  }
+                  this.setBusy(false);
+                })
             },
             nextItem() {
               let currentItem = -1;
@@ -294,7 +325,8 @@
             this.setBusy(true);
             Promise.all([
               fetch(`/api/feeds`).then(res => res.json()).then(feeds => this.feeds = feeds),
-              fetch(`/api/unread`).then(res => res.json()).then(items => this.items = items)
+              fetch(`/api/unread`).then(res => res.json()).then(items => this.items = items),
+              fetch(`/api/saved`).then(res => res.json()).then(items => this.savedItems = items)
               ])
               .then(() => {
                 this.setBusy(false);
