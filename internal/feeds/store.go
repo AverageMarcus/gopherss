@@ -61,7 +61,7 @@ func (fs *FeedStore) DeleteOldReadItems() {
 	t := time.Now()
 	threshold := t.Add(-time.Hour * 24 * 7)
 	fs.getDB().Table("items").
-		Where("read = ? and created < ?", true, threshold).
+		Where("save = ? and read = ? and created < ?", false, true, threshold).
 		Delete(Item{})
 }
 
