@@ -21,20 +21,22 @@ class FeedItem extends HTMLElement {
       width: 100% !important;
       overflow: scroll !important;
       overflow-x: auto !important;
+      font-size: 18px;
     }
     * {
       max-width: 100% !important;
       height: auto !important;
+      float: none !important;
     }
     table {
       width: 100% !important;
     }
+
     img {
       margin: auto auto !important;
     }
     p {
       font-family: charter, Georgia, "Times New Roman", Times, serif;
-      font-size: 21px;
       font-style: normal;
       font-weight: 400;
       letter-spacing: -0.063px;
@@ -46,6 +48,9 @@ class FeedItem extends HTMLElement {
     }
     :host(.dark) a {
       color: #ccc;
+    }
+    a:hover, :host(.dark) a:hover {
+      color: #ff2e88;
     }
 
     </style>
