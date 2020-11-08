@@ -1,6 +1,8 @@
 package feeds
 
 import (
+	"time"
+
 	"github.com/spf13/viper"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -53,6 +55,14 @@ func (fs *FeedStore) GetUnread() *[]ItemWithFeed {
 		Find(items)
 
 	return items
+}
+
+func (fs *FeedStore) DeleteOldReadItems() {
+	t := time.Now()
+	threshold := t.Add(-time.Hour * 24 * 7)
+	fs.getDB().Table("items").
+		Where("read = ? and created < ?", true, threshold).
+		Delete(Item{})
 }
 
 func (fs *FeedStore) GetAll() *[]ItemWithFeed {

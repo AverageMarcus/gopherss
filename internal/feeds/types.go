@@ -46,6 +46,7 @@ type Item struct {
 	FeedID      string
 	Read        bool
 	Save        bool
+	DeletedAt   gorm.DeletedAt
 }
 
 type ItemWithFeed struct {

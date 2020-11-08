@@ -23,6 +23,9 @@ func Refresh() error {
 			go RefreshFeed(feed.FeedURL)
 		}
 
+		fmt.Println("Reaping old items...")
+		feedStore.DeleteOldReadItems()
+
 		fmt.Printf("Going to sleep for %d minutes\n", interval)
 		time.Sleep(time.Duration(interval) * time.Minute)
 	}
