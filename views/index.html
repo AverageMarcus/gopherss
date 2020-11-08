@@ -132,9 +132,9 @@
           computed: {
             shownItems() {
               if (this.selectedFeed === '') {
-                return this.items.filter(item => !item.Read || item.Read === this.showRead);
+                return this.items.filter(item => item.ID == this.selectedItem || !item.Read || item.Read === this.showRead);
               } else {
-                return this.items.filter(item => item.FeedID === this.selectedFeed && (!item.Read || item.Read === this.showRead));
+                return this.items.filter(item => item.ID == this.selectedItem || item.FeedID === this.selectedFeed && (!item.Read || item.Read === this.showRead));
               }
             },
             unread() {
