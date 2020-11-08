@@ -203,14 +203,13 @@
             },
             markAllRead() {
               let ids = this.shownItems.filter(item => !item.Read).map(item => item.ID);
-              if (confirm(`Are you sure you want to mark ${ids.length} items as read?`)) {
+              if (ids.length > 0 && confirm(`Are you sure you want to mark ${ids.length} items as read?`)) {
                 this.setBusy(true);
+                this.shownItems.filter(item => !item.Read).forEach(item => item.Read = true)
                 fetch(
                   `/api/read`,
                   {method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(ids)}
                   )
-                  .then(res => res.json())
-                  .then(items => this.items = items)
                   .then(() => {
                     this.setBusy(false);
                   })
