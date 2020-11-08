@@ -1,0 +1,13 @@
+{
+  "name": "Gopherss",
+  "short_name": "Gopherss",
+  "description": "RSS reader built in Go",
+  "theme_color": "#282626",
+  "background_color": "#282626",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+  ],
+  "splash_pages": null
+}

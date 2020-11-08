@@ -4,6 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gopherss</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- <link rel="apple-touch-icon" href="static/icon.png"> -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/manifest.json">
+		<script>
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.register('/sw.js');
+			}
+    </script>
+
     <script src="/static/feed-item.js" defer></script>
 
     <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
