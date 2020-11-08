@@ -37,6 +37,9 @@
 
       <div id="app">
         <div class="menu">
+          <button title="Show Read" v-on:click="toggleShowRead()">
+            <svg width="30" height="30" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 9a4 4 0 110 8 4 4 0 010-8zm0-3.5a10 10 0 019.7 7.6.8.8 0 01-1.5.3 8.5 8.5 0 00-16.4 0 .8.8 0 01-1.5-.3A10 10 0 0112 5.5z" fill="#212121" fill-rule="nonzero"/></svg>
+          </button>
           <button title="Toggle dark mode" v-on:click="toggleDarkMode()">
             <svg width="30" height="30" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12 22a10 10 0 100-20 10 10 0 000 20zm0-2V4a8 8 0 110 16z" fill="#212121" fill-rule="nonzero"/></svg>
           </button>
@@ -124,13 +127,14 @@
             opml: '',
             isBusy: false,
             isDark: false,
+            showRead: false,
           },
           computed: {
             shownItems() {
               if (this.selectedFeed === '') {
-                return this.items;
+                return this.items.filter(item => !item.Read || item.Read === this.showRead);
               } else {
-                return this.items.filter(item => item.FeedID === this.selectedFeed);
+                return this.items.filter(item => item.FeedID === this.selectedFeed && (!item.Read || item.Read === this.showRead));
               }
             },
             unread() {
@@ -163,8 +167,6 @@
                 this.selectedItem = undefined;
               } else {
                 this.selectedItem = item.ID;
-
-                // document.querySelector(`feed-item[data-id='${item.ID}']`).content = item.Content || item.Description;
                 document.getElementById(this.selectedItem).scrollIntoView();
                 item.Read = true;
                 fetch(`/api/read/${item.ID}`, {method: "POST"})
@@ -272,6 +274,21 @@
                   console.error(err);
                   this.setBusy(false);
                 });
+            },
+            toggleShowRead() {
+              this.showRead = !this.showRead;
+
+              if (this.showRead && !this.items.some(item => item.Read)) {
+                this.setBusy(true);
+                fetch('/api/all').then(res => res.json()).then(items => this.items = items)
+                  .then(() => {
+                    this.setBusy(false);
+                  })
+                  .catch(err => {
+                    console.error(err);
+                    this.setBusy(false);
+                  });
+              }
             }
           },
           created() {

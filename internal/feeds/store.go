@@ -55,6 +55,17 @@ func (fs *FeedStore) GetUnread() *[]ItemWithFeed {
 	return items
 }
 
+func (fs *FeedStore) GetAll() *[]ItemWithFeed {
+	items := &[]ItemWithFeed{}
+	fs.getDB().Table("items").
+		Select("items.*, feeds.title as feed_title, feeds.homepage_url as feed_homepage_url").
+		Order("items.created desc, items.title").
+		Joins("left join feeds on feeds.id = items.feed_id").
+		Find(items)
+
+	return items
+}
+
 func (fs *FeedStore) SaveFeed(feed Feed) {
 	fs.getDB().Omit("Items").Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "id"}},

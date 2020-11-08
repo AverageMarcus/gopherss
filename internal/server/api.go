@@ -33,6 +33,10 @@ func (a *API) GetUnread(c *fiber.Ctx) error {
 	return c.JSON(a.FeedStore.GetUnread())
 }
 
+func (a *API) GetAll(c *fiber.Ctx) error {
+	return c.JSON(a.FeedStore.GetAll())
+}
+
 func (a *API) PostRead(c *fiber.Ctx) error {
 	a.FeedStore.MarkAsRead(c.Params("id"))
 	return nil

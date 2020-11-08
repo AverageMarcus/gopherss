@@ -52,6 +52,7 @@ func Start(port string) error {
 	app.Get("/api/feed/:id", api.GetFeed)
 	app.Get("/api/item/:id", api.GetItem)
 	app.Get("/api/unread", api.GetUnread)
+	app.Get("/api/all", api.GetAll)
 	app.Post("/api/read/:id", api.PostRead)
 	app.Post("/api/read", api.PostReadAll)
 	app.Get("/api/refresh", api.RefreshAll)
