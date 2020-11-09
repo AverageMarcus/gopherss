@@ -98,7 +98,7 @@
 
         <div class="items">
           <div v-for="item in shownItems" :id="item.ID">
-            <div :class="{'alert': true, 'alert-info': item.Read == false, 'item-heading': true}" :data-feed="item.FeedHomepageURL" v-on:click="loadItem(item)">
+            <div :class="{'alert': true, 'alert-info': !item.Read && !item.PendingRead, 'item-heading': true}" :data-feed="item.FeedHomepageURL" v-on:click="loadItem(item)">
               <span class="feed-title">{{item.FeedTitle}}</span>
               <span class="date" :title="item.Created">{{ dayjs(item.Created).fromNow() }}</span>
               <h3 class="item-title">{{item.Title}} <a :href="item.URL">↗</a></h3>
@@ -166,9 +166,13 @@
             }
           },
           methods: {
+            setPageTitle() {
+              document.title = `Gopherss (${this.unread})`;
+            },
             setBusy(isBusy) {
               this.isBusy = isBusy;
               document.body.style.cursor = isBusy ? "wait" : "";
+              this.setPageTitle();
             },
             toggleDarkMode() {
               this.isDark = !this.isDark;
@@ -177,6 +181,7 @@
             },
             loadFeed(feed) {
               this.selectedItem = undefined;
+              this.items.forEach(item => item.Read = item.Read || item.PendingRead);
               this.selectedFeed = feed;
             },
             loadItem(item) {
@@ -185,7 +190,7 @@
               } else {
                 this.selectedItem = item.ID;
                 document.getElementById(this.selectedItem).scrollIntoView();
-                item.Read = true;
+                item.PendingRead = true;
                 fetch(`/api/read/${item.ID}`, {method: "POST"})
               }
             },
