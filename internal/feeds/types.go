@@ -50,8 +50,15 @@ type Item struct {
 }
 
 type ItemWithFeed struct {
-	Item
-
+	ID              string
+	Title           string
+	URL             string
+	ImageURL        string
+	Created         *time.Time
+	GUID            string
+	FeedID          string
+	Read            bool
+	Save            bool
 	FeedTitle       string
 	FeedHomepageURL string
 }
