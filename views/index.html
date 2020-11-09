@@ -56,7 +56,7 @@
             All ({{unread}})
           </div>
 
-          <div v-for="feed in feeds" :class="{strong: unreadCounts[feed.ID], 'alert': true, 'alert-success': selectedFeed == feed.FeedURL  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
+          <div v-for="feed in feeds" :class="{strong: unreadCounts[feed.ID], 'alert': true, 'alert-success': selectedFeed == feed.ID  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
             {{feed.Title}} ({{unreadCounts[feed.ID] || '0'}})
           </div>
 
