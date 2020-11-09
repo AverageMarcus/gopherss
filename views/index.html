@@ -38,7 +38,7 @@
       <div id="app">
         <div class="menu">
           <button title="Show Read" v-on:click="toggleShowRead()">
-            <svg width="30" height="30" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 9a4 4 0 110 8 4 4 0 010-8zm0-3.5a10 10 0 019.7 7.6.8.8 0 01-1.5.3 8.5 8.5 0 00-16.4 0 .8.8 0 01-1.5-.3A10 10 0 0112 5.5z" fill="#212121" fill-rule="nonzero"/></svg>
+            <svg width="30" height="30" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 9a4 4 0 110 8 4 4 0 010-8zm0-3.5a10 10 0 019.7 7.6.8.8 0 01-1.5.3 8.5 8.5 0 00-16.4 0 .8.8 0 01-1.5-.3A10 10 0 0112 5.5z" :style="{'fill': showRead ? '#ff2e88' : '' }" fill-rule="nonzero"/></svg>
           </button>
           <button title="Toggle dark mode" v-on:click="toggleDarkMode()">
             <svg width="30" height="30" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12 22a10 10 0 100-20 10 10 0 000 20zm0-2V4a8 8 0 110 16z" fill="#212121" fill-rule="nonzero"/></svg>
@@ -107,7 +107,7 @@
               <div class="card-content">
                 <div class="menu">
                   <button title="Save" v-on:click="saveItem(item)" :disabled="isBusy">
-                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.8 5.6l-.8.8-.8-.8a5.4 5.4 0 00-7.6 7.6l7.9 7.9c.3.3.7.3 1 0l8-8a5.4 5.4 0 10-7.7-7.5z" :style="{'fill': item.Save ? '#ff2e88' : '#eee' }" fill-rule="nonzero"/></svg>
+                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.8 5.6l-.8.8-.8-.8a5.4 5.4 0 00-7.6 7.6l7.9 7.9c.3.3.7.3 1 0l8-8a5.4 5.4 0 10-7.7-7.5z" :style="{'fill': item.Save ? '#ff2e88' : '' }" fill-rule="nonzero"/></svg>
                   </button>
                 </div>
 
