@@ -183,6 +183,7 @@
               this.selectedItem = undefined;
               this.items.forEach(item => item.Read = item.Read || item.PendingRead);
               this.selectedFeed = feed;
+              window.location.hash = feed;
             },
             loadItem(item) {
               if (this.selectedItem === item.ID) {
@@ -342,6 +343,9 @@
               ])
               .then(() => {
                 this.setBusy(false);
+                if (window.location.hash.length > 1) {
+                  this.loadFeed(window.location.hash.substr(1));
+                }
               })
               .catch(err => {
                 console.error(err);
