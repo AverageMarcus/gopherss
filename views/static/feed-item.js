@@ -64,6 +64,11 @@ class FeedItem extends HTMLElement {
         [...this.shadowRoot.querySelectorAll('a[href^=http]')].forEach(a => {
           a.setAttribute("target", "_blank");
           a.setAttribute("rel", "noopener");
+        });
+        [...this.shadowRoot.querySelectorAll('p')].forEach(p => {
+          if (p.innerText.trim() == "") {
+            p.remove();
+          }
         })
       })
 
