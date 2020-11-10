@@ -152,13 +152,13 @@
               }
             },
             unread() {
-              return this.items.filter(item => !item.Read).length;
+              return this.items.filter(item => !item.Read && !item.PendingRead).length;
             },
             saved() {
               return this.savedItems.length;
             },
             unreadCounts() {
-              return this.items.filter(item => !item.Read).reduce((acc, item) => {
+              return this.items.filter(item => !item.Read && !item.PendingRead).reduce((acc, item) => {
                 if (!acc[item.FeedID]) acc[item.FeedID] = 0;
                 acc[item.FeedID]++;
                 return acc;
