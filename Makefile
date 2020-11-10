@@ -59,7 +59,7 @@ ci:
 
 .PHONY: release # Release the latest version of the application
 release:
-	@echo "⚠️ 'released' unimplemented"
+	@kubectl --namespace rss set image deployment rss web=docker.cluster.fun/averagemarcus/gopherss:$(SHA)
 
 .PHONY: help # Show this list of commands
 help:
