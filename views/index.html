@@ -377,6 +377,19 @@
               }
             };
 
+            // Fetch updates every 5 minutes
+            setInterval(() => {
+              fetch(`/api/unread`)
+                .then(res => res.json())
+                .then(items => {
+                  for (let item of items) {
+                    if (!this.items.some(i => i.ID == item.ID)) {
+                      this.items.push(item);
+                    }
+                  }
+                })
+            }, 5 * 60 * 1000);
+
             document.addEventListener('keydown', this._keyListener.bind(this));
 
             if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
