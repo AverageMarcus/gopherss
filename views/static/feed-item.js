@@ -69,7 +69,21 @@ class FeedItem extends HTMLElement {
           if (p.innerText.trim() == "") {
             p.remove();
           }
-        })
+        });
+
+        let url = new URL(item.URL);
+        [...this.shadowRoot.querySelectorAll('img[src^="/"]')].forEach(i => {
+          i.src = url.origin + i.getAttribute('src');
+        });
+        [...this.shadowRoot.querySelectorAll('a[href^="/"]')].forEach(a => {
+          a.href = url.origin + a.getAttribute('src');
+        });
+        [...this.shadowRoot.querySelectorAll('img:not([src^=http])')].forEach(i => {
+          i.src = url.origin +'/'+ i.getAttribute('src');
+        });
+        [...this.shadowRoot.querySelectorAll('a:not([href^=http])')].forEach(a => {
+          a.href = url.origin +'/'+ a.getAttribute('src');
+        });
       })
 
   }
