@@ -30,12 +30,17 @@
     <link rel="stylesheet" href="/static/style.css">
   </head>
   <body class="hack">
-    <div class="container">
+    <div id="app" class="container">
+      <header>
+        <button class="feed-toggle" v-on:click="toggleFeeds">
+          <svg width="24" height="24" viewbox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 16a3.5 3.5 0 110-7 3.5 3.5 0 010 7z" fill="#212121"/><path d="M24 27.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z" fill="#212121"/><path d="M20.5 35.5a3.5 3.5 0 107 0 3.5 3.5 0 00-7 0z" fill="#212121"/></svg>
+        </button>
       <h1 class="title">
         Gopherss
       </h1>
+      </header>
 
-      <div id="app">
+      <div>
         <div class="menu">
           <button title="Show Read" v-on:click="toggleShowRead()">
             <svg width="30" height="30" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 9a4 4 0 110 8 4 4 0 010-8zm0-3.5a10 10 0 019.7 7.6.8.8 0 01-1.5.3 8.5 8.5 0 00-16.4 0 .8.8 0 01-1.5-.3A10 10 0 0112 5.5z" :style="{'fill': showRead ? '#ff2e88' : '' }" fill-rule="nonzero"/></svg>
@@ -334,6 +339,9 @@
               }
 
               return "https://s2.googleusercontent.com/s2/favicons?domain_url=" + (feed.HomepageURL || feed.FeedURL);
+            },
+            toggleFeeds() {
+              document.querySelector('.feeds').classList.toggle('show-mobile');
             }
           },
           created() {

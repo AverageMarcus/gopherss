@@ -25,6 +25,14 @@ body {
   position: relative;
 }
 
+header {
+  display: flex;
+}
+
+header h1 {
+  width: -moz-available;
+}
+
 .item-heading .item-title {
 
   margin-bottom: 0;
@@ -82,17 +90,17 @@ body {
   text-align: right;
 }
 
-.menu button {
+button {
   background: none;
   border: none;
   cursor: pointer;
 }
 
-.menu button:disabled {
+button:disabled {
   cursor: not-allowed;
 }
 
-.menu button:not(:disabled):hover svg path {
+button:not(:disabled):hover svg path {
   fill: #ff2e88;
 }
 
@@ -111,11 +119,29 @@ body {
   box-shadow: 1px 2px 3px #333
 }
 
+@media only screen and (min-width: 701px) {
+  .feed-toggle {
+    display: none;
+  }
+}
+
 @media only screen and (max-width: 700px) {
-  .feeds{ display: none !important; }
+  .feeds{
+    position: initial;
+    width: 100%;
+    height: 0px;
+    margin: 0;
+    overflow: hidden;
+    transition: all 2s;
+  }
   .container {
     max-width: 100em;
   }
+}
+
+.feeds.show-mobile {
+  height: 50vh;
+  overflow-y: scroll;
 }
 
 .dark {
