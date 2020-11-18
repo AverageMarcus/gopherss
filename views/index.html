@@ -186,6 +186,7 @@
               window.location.hash = feed;
             },
             loadItem(item) {
+              this.setBusy(true);
               if (this.selectedItem === item.ID) {
                 this.selectedItem = undefined;
               } else {
@@ -194,6 +195,7 @@
                 item.PendingRead = true;
                 fetch(`/api/read/${item.ID}`, {method: "POST"})
               }
+              this.setBusy(false);
             },
             saveItem(item) {
               this.setBusy(true);
@@ -338,7 +340,7 @@
             this.setBusy(true);
             Promise.all([
               fetch(`/api/feeds`).then(res => res.json()).then(feeds => this.feeds = feeds),
-              fetch(`/api/unread`).then(res => res.json()).then(items => this.items = items),
+              fetch(`/api/unread`).then(res => res.json()).then(items => this.items = items.map(item => {item.PendingRead = false; return item;})),
               fetch(`/api/saved`).then(res => res.json()).then(items => this.savedItems = items)
               ])
               .then(() => {
