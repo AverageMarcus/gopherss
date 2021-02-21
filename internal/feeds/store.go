@@ -33,6 +33,11 @@ func (fs *FeedStore) GetFeed(id string) *Feed {
 	return feed
 }
 
+func (fs *FeedStore) DeleteFeed(id string) {
+	fs.getDB().Delete(Feed{ID: id})
+	fs.getDB().Unscoped().Delete(Item{}, "feed_id = ?", id)
+}
+
 func (fs *FeedStore) GetItem(id string) *Item {
 	item := &Item{}
 	fs.getDB().Where("id = ?", id).First(item)

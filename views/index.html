@@ -63,6 +63,11 @@
 
           <div v-for="feed in feeds" :class="{strong: unreadCounts[feed.ID], 'alert': true, 'alert-success': selectedFeed == feed.ID  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
             <img :src="feedIcon(feed)" style="height: 16px; width: 16px;" onerror="this.style.visibility = 'hidden'" /> {{feed.Title}} ({{unreadCounts[feed.ID] || '0'}})
+            <div style="float:right">
+              <button title="Delete Feed" v-on:click="deleteFeed(feed)" :disabled="isBusy">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="16px" width="16px" viewBox="0 0 473 473" enable-background="new 0 0 473 473"><g><path d="M317.7 214.4l5.6-86.4h21V38h-98.4V0H132.7v38H34.3v90h21l20 305h140.5a129.6 129.6 0 00223-89.4c0-68.6-53.7-124.8-121.1-129.2zM162.7 30h53.2v8h-53.2v-8zM64.3 68h250v30h-250V68zm39 335l-18-275h208l-5.8 88a129.6 129.6 0 00-93.2 187h-91zm206 40a99.5 99.5 0 010-198.9 99.5 99.5 0 010 198.9z"/><path d="M342.2 289.4l-33 33-32.9-33-21.2 21.2 33 33-33 33 21.2 21.1 33-33 33 33 21.2-21.2-33-33 33-32.9z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>
+              </button>
+            </div>
           </div>
 
           <div :class="{ strong: items.length, alert: true, 'alert-success': selectedFeed == 'SAVED'}" v-on:click="loadFeed('SAVED')">
@@ -221,6 +226,17 @@
             },
             showIframe(item) {
               document.querySelector(`feed-item[item-id='${item.ID}'`).showIframe();
+            },
+            deleteFeed(feed) {
+              if (confirm(`Are you sure you want to remove '${feed.Title}'`)) {
+                this.setBusy(true);
+                fetch(`/api/feed/${feed.ID}`, {method: "DELETE"})
+                  .then(() => {
+                    this.feeds = this.feeds.filter(f => f.ID != feed.ID);
+                    this.items = this.items.filter(i => i.FeedID != feed.ID);
+                    this.setBusy(false);
+                  });
+              }
             },
             nextItem() {
               let currentItem = -1;

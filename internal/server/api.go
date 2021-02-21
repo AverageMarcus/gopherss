@@ -17,6 +17,11 @@ func (a *API) GetFeed(c *fiber.Ctx) error {
 	return c.JSON(a.FeedStore.GetFeed(c.Params("id")))
 }
 
+func (a *API) DeleteFeed(c *fiber.Ctx) error {
+	a.FeedStore.DeleteFeed(c.Params("id"))
+	return nil
+}
+
 func (a *API) PostFeed(c *fiber.Ctx) error {
 	url := ""
 	if err := c.BodyParser(&url); err != nil {
