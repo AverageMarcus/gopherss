@@ -38,7 +38,7 @@ class FeedItem extends HTMLElement {
     h1, h2, h3, h4 {
       margin-top: 1.3em;
     }
-    h1:first-of-type {
+    :root > h1 {
       margin-top: 0;
     }
     p, a {
