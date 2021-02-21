@@ -59,6 +59,11 @@ func RefreshFeed(url string) Feed {
 				imageURL = f.Image.URL
 			}
 
+			createdTime := item.PublishedParsed
+			if createdTime == nil {
+				createdTime = item.UpdatedParsed
+			}
+
 			feed.Items = append(feed.Items, Item{
 				ID:          strings.ReplaceAll(base64.StdEncoding.EncodeToString([]byte(item.GUID)), "/", ""),
 				Title:       item.Title,
@@ -67,7 +72,7 @@ func RefreshFeed(url string) Feed {
 				URL:         item.Link,
 				ImageURL:    imageURL,
 				LastUpdated: item.UpdatedParsed,
-				Created:     item.PublishedParsed,
+				Created:     createdTime,
 				GUID:        item.GUID,
 				FeedID:      feed.ID,
 			})
