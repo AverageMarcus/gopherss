@@ -74,6 +74,12 @@ class FeedItem extends HTMLElement {
       padding: 0 4px;
     }
 
+    iframe {
+      display: block;
+      width: 100%;
+      min-height: 600px;
+      border: none;
+    }
     </style>
     `;
 
@@ -81,7 +87,8 @@ class FeedItem extends HTMLElement {
       .then(res => res.json())
       .then(item => {
         template.innerHTML += `<h1><a href="${item.URL}" target="_blank" rel="noopener">${item.Title}</a></h1>`;
-        template.innerHTML += item.Content || item.Description;
+        template.innerHTML += `<div class="feedContent">${item.Content || item.Description}</div>`;
+        template.innerHTML += `<iframe style="display: none;" data-src="${item.URL}"></iframe>`
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         [...this.shadowRoot.querySelectorAll('a[href^=http]')].forEach(a => {
           a.setAttribute("target", "_blank");
@@ -107,7 +114,12 @@ class FeedItem extends HTMLElement {
           a.href = url.origin +'/'+ a.getAttribute('src');
         });
       })
+  }
 
+  showIframe() {
+    this.shadowRoot.querySelector(".feedContent").style.display = "none";
+    this.shadowRoot.querySelector("iframe").src = this.shadowRoot.querySelector("iframe").dataset.src;
+    this.shadowRoot.querySelector("iframe").style.display = "block";
   }
 }
 customElements.define('feed-item', FeedItem);
