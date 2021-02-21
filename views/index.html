@@ -61,7 +61,7 @@
             All ({{unread}})
           </div>
 
-          <div v-for="feed in feeds" :class="{strong: unreadCounts[feed.ID], 'alert': true, 'alert-success': selectedFeed == feed.ID  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
+          <div v-for="feed in sortedFeeds" :class="{strong: unreadCounts[feed.ID], 'alert': true, 'alert-success': selectedFeed == feed.ID  }" :data-feed="feed.FeedURL" v-on:click="loadFeed(feed.ID)">
             <img :src="feedIcon(feed)" style="height: 16px; width: 16px;" onerror="this.style.visibility = 'hidden'" /> {{feed.Title}} ({{unreadCounts[feed.ID] || '0'}})
             <div style="float:right">
               <button title="Delete Feed" v-on:click="deleteFeed(feed)" :disabled="isBusy">
@@ -163,6 +163,9 @@
               } else {
                 return this.items.filter(item => item.ID == this.selectedItem || item.FeedID === this.selectedFeed && (!item.Read || item.Read === this.showRead));
               }
+            },
+            sortedFeeds() {
+              return this.feeds.sort((a, b) => a.Title.toLowerCase() > b.Title.toLowerCase());
             },
             unread() {
               return this.items.filter(item => !item.Read && !item.PendingRead).length;
