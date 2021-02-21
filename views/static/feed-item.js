@@ -35,12 +35,20 @@ class FeedItem extends HTMLElement {
     img {
       margin: auto auto !important;
     }
+    h1, h2, h3, h4 {
+      margin-top: 1.3em;
+    }
+    h1:first-of-type {
+      margin-top: 0;
+    }
+    p, a {
+      line-height: 1.2em;
+    }
     p {
       font-family: charter, Georgia, "Times New Roman", Times, serif;
       font-style: normal;
       font-weight: 400;
       letter-spacing: -0.063px;
-      line-height: 32px
     }
     a {
       color: #333;
@@ -53,12 +61,26 @@ class FeedItem extends HTMLElement {
       color: #ff2e88;
     }
 
+    pre {
+      overflow-x: scroll;
+      padding: 8px;
+      background: #62848463;
+    }
+    pre code {
+      margin-right: 8px;
+    }
+    p code {
+      background: #62848463;
+      padding: 0 4px;
+    }
+
     </style>
     `;
 
     fetch(`/api/item/${this.getAttribute('item-id')}`)
       .then(res => res.json())
       .then(item => {
+        template.innerHTML += `<h1><a href="${item.URL}" target="_blank" rel="noopener">${item.Title}</a></h1>`;
         template.innerHTML += item.Content || item.Description;
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         [...this.shadowRoot.querySelectorAll('a[href^=http]')].forEach(a => {
