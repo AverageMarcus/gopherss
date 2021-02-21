@@ -392,7 +392,8 @@
                 .then(items => {
                   for (let item of items) {
                     if (!this.items.some(i => i.ID == item.ID)) {
-                      this.items.push(item);
+                      this.items.unshift(item);
+                      this.setPageTitle();
                     }
                   }
                 })
