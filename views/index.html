@@ -15,7 +15,8 @@
 			}
     </script>
 
-    <script src="/static/feed-item.js" defer></script>
+<script src="/static/feed-item.js" defer></script>
+<script src="/static/favicon.js"></script>
 
     <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
@@ -184,6 +185,7 @@
           methods: {
             setPageTitle() {
               document.title = `Gopherss (${this.unread})`;
+              setFavicon(this.unread);
             },
             setBusy(isBusy) {
               this.isBusy = isBusy;
