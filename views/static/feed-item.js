@@ -105,13 +105,13 @@ class FeedItem extends HTMLElement {
           i.src = url.origin + i.getAttribute('src');
         });
         [...this.shadowRoot.querySelectorAll('a[href^="/"]')].forEach(a => {
-          a.href = url.origin + a.getAttribute('src');
+          a.href = url.origin + a.getAttribute('href');
         });
         [...this.shadowRoot.querySelectorAll('img:not([src^=http])')].forEach(i => {
           i.src = url.origin +'/'+ i.getAttribute('src');
         });
         [...this.shadowRoot.querySelectorAll('a:not([href^=http])')].forEach(a => {
-          a.href = url.origin +'/'+ a.getAttribute('src');
+          a.href = url.origin +'/'+ a.getAttribute('href');
         });
       })
   }
