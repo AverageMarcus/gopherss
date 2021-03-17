@@ -90,7 +90,6 @@
                 <fieldset class="form-group">
                   <label for="url">URL:</label>
                   <input id="url" type="text" placeholder="" class="form-control" v-model="newSiteURL">
-                  <div class="help-block">Enter the direct URL to the feed</div>
                 </fieldset>
                 <div class="form-actions">
                   <button type="button" class="btn btn-primary btn-block" v-on:click="addSite(newSiteURL)" :disabled="isBusy">Add</button>
@@ -306,10 +305,12 @@
                 })
                 .then(() => {
                   this.setBusy(false);
+                  this.newSiteURL = '';
                 })
                 .catch(err => {
                   console.error(err);
                   this.setBusy(false);
+                  this.newSiteURL = '';
                 });
               this.showAddModal = false;
             },

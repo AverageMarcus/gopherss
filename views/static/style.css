@@ -185,3 +185,7 @@ button:not(:disabled):hover svg path {
 .dark .item-content .card-content a {
   color: #ccc;
 }
+
+.card-header {
+  padding: 5px !important;
+}

@@ -3,9 +3,12 @@ package feeds
 import (
 	"encoding/base64"
 	"fmt"
+	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/mmcdole/gofeed"
 	"github.com/spf13/viper"
 )
@@ -31,12 +34,17 @@ func Refresh() error {
 	}
 }
 
-func RefreshFeed(url string) Feed {
-	fmt.Printf("Refreshing %s\n", url)
+func RefreshFeed(feedUrl string) Feed {
+	fmt.Printf("Refreshing %s\n", feedUrl)
 	var feed Feed
-	f, err := fp.ParseURL(url)
-	if err != nil {
-		fmt.Printf("Failed to refresh %s\n", url)
+	f, err := fp.ParseURL(feedUrl)
+	if err != nil && err == gofeed.ErrFeedTypeNotDetected {
+		foundFeed := loadFeedFromWebpage(feedUrl)
+		if foundFeed != nil {
+			feed = *foundFeed
+		}
+	} else if err != nil {
+		fmt.Printf("Failed to refresh %s\n%v\n", feedUrl, err)
 	} else {
 		imageURL := ""
 		if f.Image != nil {
@@ -44,11 +52,11 @@ func RefreshFeed(url string) Feed {
 		}
 
 		feed = Feed{
-			ID:          strings.ReplaceAll(base64.StdEncoding.EncodeToString([]byte(url)), "/", ""),
+			ID:          strings.ReplaceAll(base64.StdEncoding.EncodeToString([]byte(feedUrl)), "/", ""),
 			Title:       f.Title,
 			Description: f.Description,
 			HomepageURL: f.Link,
-			FeedURL:     url,
+			FeedURL:     feedUrl,
 			ImageURL:    imageURL,
 			LastUpdated: f.UpdatedParsed,
 			Items:       []Item{},
@@ -83,4 +91,36 @@ func RefreshFeed(url string) Feed {
 	}
 
 	return feed
+}
+
+func loadFeedFromWebpage(webpageUrl string) *Feed {
+	res, err := http.Get(webpageUrl)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		fmt.Printf("status code error: %d %s", res.StatusCode, res.Status)
+		return nil
+	}
+
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	feedUrl, ok := doc.Find(`[rel="alternate"][type="application/rss+xml"]`).First().Attr("href")
+	if ok {
+		if !strings.HasPrefix(feedUrl, "http") {
+			parsedUrl, _ := url.Parse(webpageUrl)
+			feedUrl = fmt.Sprintf("%s://%s%s", parsedUrl.Scheme, parsedUrl.Host, feedUrl)
+		}
+
+		feed := RefreshFeed(feedUrl)
+		return &feed
+	}
+
+	return nil
 }
