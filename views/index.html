@@ -118,7 +118,7 @@
               <div class="card-content">
                 <div class="menu">
                   <button title="Show IFrame" v-on:click="showIframe(item)" :disabled="isBusy">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"width="24" height="24" viewBox="0 0 426 426" enable-background="new 0 0 426.001 426.001"><g><path d="M406.8 54.2H19.2A19.2 19.2 0 000 73.4v279.2c0 10.6 8.6 19.2 19.2 19.2h387.6c10.6 0 19.2-8.6 19.2-19.2V73.4c0-10.6-8.6-19.2-19.2-19.2zM368.4 82a17.8 17.8 0 110 35.7 17.8 17.8 0 010-35.7zm-48 0a17.8 17.8 0 110 35.7 17.8 17.8 0 010-35.7zm-48 0a17.8 17.8 0 110 35.7 17.8 17.8 0 010-35.7zm115.2 251.5H38.4V141.6h349.2v191.8z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 426 426" ><path d="M406.8 54.2H19.2A19.2 19.2 0 000 73.4v279.2c0 10.6 8.6 19.2 19.2 19.2h387.6c10.6 0 19.2-8.6 19.2-19.2V73.4c0-10.6-8.6-19.2-19.2-19.2zM368.4 82a17.8 17.8 0 110 35.7 17.8 17.8 0 010-35.7zm-48 0a17.8 17.8 0 110 35.7 17.8 17.8 0 010-35.7zm-48 0a17.8 17.8 0 110 35.7 17.8 17.8 0 010-35.7zm115.2 251.5H38.4V141.6h349.2v191.8z" :style="{'fill': item.IframeVisible ? '#ff2e88' : '' }" fill-rule="nonzero"/></svg>
                   </button>
                   <button title="Save" v-on:click="saveItem(item)" :disabled="isBusy">
                     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.8 5.6l-.8.8-.8-.8a5.4 5.4 0 00-7.6 7.6l7.9 7.9c.3.3.7.3 1 0l8-8a5.4 5.4 0 10-7.7-7.5z" :style="{'fill': item.Save ? '#ff2e88' : '' }" fill-rule="nonzero"/></svg>
@@ -199,7 +199,10 @@
             },
             loadFeed(feed) {
               this.selectedItem = undefined;
-              this.items.forEach(item => item.Read = item.Read || item.PendingRead);
+              this.items.forEach(item => {
+                item.Read = item.Read || item.PendingRead;
+                item.IframeVisible = false;
+              });
               this.selectedFeed = feed;
               window.location.hash = feed;
             },
@@ -230,6 +233,7 @@
                 })
             },
             showIframe(item) {
+              item.IframeVisible = !item.IframeVisible;
               document.querySelector(`feed-item[item-id='${item.ID}'`).showIframe();
             },
             deleteFeed(feed) {
@@ -377,7 +381,7 @@
             this.setBusy(true);
             Promise.all([
               fetch(`/api/feeds`).then(res => res.json()).then(feeds => this.feeds = feeds),
-              fetch(`/api/unread`).then(res => res.json()).then(items => this.items = items.map(item => {item.PendingRead = false; return item;})),
+              fetch(`/api/unread`).then(res => res.json()).then(items => this.items = items.map(item => {item.PendingRead = false; item.IframeVisible = false; return item;})),
               fetch(`/api/saved`).then(res => res.json()).then(items => this.savedItems = items)
               ])
               .then(() => {

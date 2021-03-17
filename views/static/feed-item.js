@@ -117,9 +117,14 @@ class FeedItem extends HTMLElement {
   }
 
   showIframe() {
-    this.shadowRoot.querySelector(".feedContent").style.display = "none";
-    this.shadowRoot.querySelector("iframe").src = this.shadowRoot.querySelector("iframe").dataset.src;
-    this.shadowRoot.querySelector("iframe").style.display = "block";
+    if (this.shadowRoot.querySelector(".feedContent").style.display != "none") {
+      this.shadowRoot.querySelector(".feedContent").style.display = "none";
+      this.shadowRoot.querySelector("iframe").src = this.shadowRoot.querySelector("iframe").dataset.src;
+      this.shadowRoot.querySelector("iframe").style.display = "block";
+    } else {
+      this.shadowRoot.querySelector(".feedContent").style.display = "block";
+      this.shadowRoot.querySelector("iframe").style.display = "none";
+    }
   }
 }
 customElements.define('feed-item', FeedItem);
