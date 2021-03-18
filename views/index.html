@@ -424,7 +424,7 @@
                 .then(res => res.json())
                 .then(items => {
                   if (!this.showRead) {
-                    if (!items.some(i => i.ID == this.selectedItem)) {
+                    if (this.selectedItem && !items.some(i => i.ID == this.selectedItem)) {
                       items.unshift(this.items.find(i => i.ID == this.selectedItem));
                     }
 
