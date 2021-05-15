@@ -1,3 +1,48 @@
+@font-face {
+  font-family: "Atkinson Hyperlegible Bold";
+  font-style: normal;
+  font-weight: normal;
+  font-display: block;
+  src: url("/static/fonts/Atkinson-Hyperlegible-Bold-102a.woff2") format("woff2"),
+    url("/static/fonts/Atkinson-Hyperlegible-Bold-102a.woff") format("woff"),
+    url("/static/fonts/Atkinson-Hyperlegible-Bold-102a.ttf") format("ttf"),
+    url("/static/fonts/Atkinson-Hyperlegible-Bold-102a.eot") format("eot"),
+    url("/static/fonts/Atkinson-Hyperlegible-Bold-102a.svg") format("svg");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Regular";
+  font-style: normal;
+  font-weight: normal;
+  font-display: block;
+  src: url("/static/fonts/Atkinson-Hyperlegible-Regular-102a.woff2") format("woff2"),
+    url("/static/fonts/Atkinson-Hyperlegible-Regular-102a.woff") format("woff"),
+    url("/static/fonts/Atkinson-Hyperlegible-Regular-102a.ttf") format("ttf"),
+    url("/static/fonts/Atkinson-Hyperlegible-Regular-102a.eot") format("eot"),
+    url("/static/fonts/Atkinson-Hyperlegible-Regular-102a.svg") format("svg");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Italic";
+  font-style: normal;
+  font-weight: normal;
+  font-display: block;
+  src: url("/static/fonts/Atkinson-Hyperlegible-Italic-102a.woff2") format("woff2"),
+    url("/static/fonts/Atkinson-Hyperlegible-Italic-102a.woff") format("woff"),
+    url("/static/fonts/Atkinson-Hyperlegible-Italic-102a.ttf") format("ttf"),
+    url("/static/fonts/Atkinson-Hyperlegible-Italic-102a.eot") format("eot"),
+    url("/static/fonts/Atkinson-Hyperlegible-Italic-102a.svg") format("svg");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible BoldItalic";
+  font-style: normal;
+  font-weight: normal;
+  font-display: block;
+  src: url("/static/fonts/Atkinson-Hyperlegible-BoldItalic-102a.woff2") format("woff2"),
+    url("/static/fonts/Atkinson-Hyperlegible-BoldItalic-102a.woff") format("woff"),
+    url("/static/fonts/Atkinson-Hyperlegible-BoldItalic-102a.ttf") format("ttf"),
+    url("/static/fonts/Atkinson-Hyperlegible-BoldItalic-102a.eot") format("eot"),
+    url("/static/fonts/Atkinson-Hyperlegible-BoldItalic-102a.svg") format("svg");
+}
+
 body {
   padding-bottom: 20px;
 }
@@ -171,7 +216,7 @@ button:not(:disabled):hover svg path {
 }
 
 .item-content .card-content p {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Atkinson Hyperlegible Regular"; /*'Roboto', sans-serif;*/
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0em;
@@ -182,8 +227,8 @@ button:not(:disabled):hover svg path {
   color: #333;
   font-weight: bold;
 }
-.dark .item-content .card-content a {
-  color: #ccc;
+.dark {
+  color: #eee;
 }
 
 .card-header {

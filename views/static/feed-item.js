@@ -9,13 +9,6 @@ class FeedItem extends HTMLElement {
     const template = document.createElement('template');
     template.innerHTML = `
     <style>
-    @font-face {
-      font-family: "charter";
-      src: url("https://glyph.medium.com/font/be78681/0-3j_4g_6bu_6c4_6c8_6c9_6cc_6cd_6ci_6cm/charter-400-normal.woff") format("woff");
-      font-style: normal;
-      font-weight: 400;
-      unicode-range: U+0-7F, U+A0, U+200A, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022, U+2026;
-    }
 
     :host {
       width: 100% !important;
@@ -36,6 +29,7 @@ class FeedItem extends HTMLElement {
       margin: auto auto !important;
     }
     h1, h2, h3, h4 {
+      font-family: "Atkinson Hyperlegible Bold";
       margin-top: 1.3em;
     }
     :root > h1 {
@@ -44,18 +38,34 @@ class FeedItem extends HTMLElement {
     p, a {
       line-height: 1.2em;
     }
-    p {
-      font-family: charter, Georgia, "Times New Roman", Times, serif;
+    p, li, div {
+      font-family: "Atkinson Hyperlegible Regular";
       font-style: normal;
       font-weight: 400;
-      letter-spacing: -0.063px;
+      letter-spacing: 0.05em
+    }
+    em {
+      font-family: "Atkinson Hyperlegible Italic";
+      font-style: normal;
+    }
+    strong {
+      font-weight: 500;
+      font-family: "Atkinson Hyperlegible Bold";
+    }
+    em strong, strong em {
+      font-family: "Atkinson Hyperlegible BoldItalic";
+    }
+    li {
+      margin: 0.6em 0;
     }
     a {
       color: #333;
-      font-weight: bold;
+      font-family: "Atkinson Hyperlegible Bold";
+      font-weight: 500;
+      letter-spacing: 0.05em
     }
     :host(.dark) a {
-      color: #ccc;
+      color: #eee;
     }
     a:hover, :host(.dark) a:hover {
       color: #ff2e88;
