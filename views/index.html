@@ -450,27 +450,39 @@
               }
             };
 
+            let inView = true;
+            window.onfocus = window.onblur = window.onpageshow = window.onpagehide = function (e) {
+              if ({focus:1, pageshow:1}[e.type]) {
+                if (inView) return;
+                inView = true;
+              } else if (inView) {
+                inView = false;
+              }
+            };
+
             // Fetch updates every 5 minutes
             setInterval(() => {
-              fetch(`/api/unread`)
-                .then(res => res.json())
-                .then(items => {
-                  if (!this.showRead) {
-                    if (this.selectedItem && !items.some(i => i.ID == this.selectedItem)) {
-                      items.unshift(this.items.find(i => i.ID == this.selectedItem));
-                    }
+              if (!inView) {
+                fetch(`/api/unread`)
+                  .then(res => res.json())
+                  .then(items => {
+                    if (!this.showRead) {
+                      if (this.selectedItem && !items.some(i => i.ID == this.selectedItem)) {
+                        items.unshift(this.items.find(i => i.ID == this.selectedItem));
+                      }
 
-                    this.items = items;
-                  } else {
-                    for (let item of items) {
-                      if (!this.items.some(i => i.ID == item.ID)) {
-                        this.items.unshift(item);
+                      this.items = items;
+                    } else {
+                      for (let item of items) {
+                        if (!this.items.some(i => i.ID == item.ID)) {
+                          this.items.unshift(item);
+                        }
                       }
                     }
-                  }
 
-                  this.setPageTitle();
-                })
+                    this.setPageTitle();
+                  });
+              }
             }, 5 * 60 * 1000);
 
             document.addEventListener('keydown', this._keyListener.bind(this));
