@@ -20,6 +20,7 @@
     <script src="/static/favicon.js"></script>
 
     <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-progressbar@0.7.5/dist/vue-progressbar.min.js"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
     <script src="https://unpkg.com/dayjs@1.9.5/plugin/relativeTime.js"></script>
     <script>dayjs.extend(window.dayjs_plugin_relativeTime)</script>
@@ -136,7 +137,7 @@
           </div>
         </div>
 
-
+        <vue-progress-bar></vue-progress-bar>
       </div>
 
       <script>
@@ -149,6 +150,21 @@
             rect.right <= (window.innerWidth || document.documentElement.clientWidth)
           );
         }
+
+        Vue.use(VueProgressBar, {
+          color: '#00bcd4',
+          failedColor: '#ff2e88',
+          thickness: '5px',
+          transition: {
+            speed: '1s',
+            opacity: '0.8s',
+            termination: 100
+          },
+          autoRevert: true,
+          location: 'top',
+          inverse: false
+        });
+
         const vm = new Vue({
           el: '#app',
           data: {
@@ -197,6 +213,11 @@
               setFavicon(this.unread);
             },
             setBusy(isBusy) {
+              if (isBusy) {
+                this.$Progress.start();
+              } else {
+                this.$Progress.finish();
+              }
               this.isBusy = isBusy;
               document.body.style.cursor = isBusy ? "wait" : "";
               this.setPageTitle();
