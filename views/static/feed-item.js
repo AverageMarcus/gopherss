@@ -31,6 +31,7 @@ class FeedItem extends HTMLElement {
     h1, h2, h3, h4 {
       font-family: "Atkinson Hyperlegible Bold";
       margin-top: 1.3em;
+      line-height: 1em;
     }
     :root > h1 {
       margin-top: 0;
