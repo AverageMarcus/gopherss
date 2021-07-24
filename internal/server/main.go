@@ -2,10 +2,7 @@ package server
 
 import (
 	"fmt"
-	"html/template"
-	"time"
 
-	"github.com/dustin/go-humanize"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html"
 
@@ -23,21 +20,6 @@ func init() {
 func Start(port string) error {
 	engine := html.New("./views", ".html")
 	engine.Reload(true)
-
-	engine.AddFunc("htmlSafe", func(html string) template.HTML {
-		return template.HTML(html)
-	})
-	engine.AddFunc("humanDate", func(date time.Time) template.HTML {
-		return template.HTML(humanize.Time(date))
-	})
-	engine.AddFunc("coalesce", func(args ...*string) string {
-		for _, s := range args {
-			if s != nil && *s != "" {
-				return *s
-			}
-		}
-		return ""
-	})
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
