@@ -44,7 +44,7 @@ func RefreshFeed(feedUrl string) Feed {
 			feed = *foundFeed
 		}
 	} else if err != nil {
-		fmt.Printf("Failed to refresh %s\n%v\n", feedUrl, err)
+		fmt.Printf("Failed to refresh %s - %v\n", feedUrl, err)
 	} else {
 		imageURL := ""
 		if f.Image != nil {
